@@ -14,6 +14,9 @@ importers:
       path:
         specifier: ^0.12.7
         version: 0.12.7
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
 
 packages:
 
@@ -33,6 +36,10 @@ packages:
   util@0.10.4:
     resolution: {integrity: sha512-0Pm9hTQ3se5ll1XihRic3FDIku70C+iHUdT/W926rSgHV5QgXsYbKZN8MSC3tJtSkhuROzvsQjAaFENRXr+19A==}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
 snapshots:
 
   fs@0.0.1-security: {}
@@ -49,3 +56,5 @@ snapshots:
   util@0.10.4:
     dependencies:
       inherits: 2.0.3
+
+  uuid@10.0.0: {}
