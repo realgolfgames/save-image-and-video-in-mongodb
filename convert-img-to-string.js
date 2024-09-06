@@ -1,7 +1,7 @@
 import fs from 'fs';
 
-let img_path = "my_image.jpeg_path" // Replace with the path to your image file;
-let txt_path = "my_image.txt_path" // Replace with the path to save the Base64 string;
+let img_path = "/Users/julianhammer/Downloads/0cf700de-ddea-421d-a0ca-8c2410ab494b.jpg" // Replace with the path to your image file;
+let txt_path = "viki_katze.txt" // Replace with the path to save the Base64 string;
 
 // Function to convert an image file to a Base64 string
 function imageToBase64(imagePath) {

@@ -1,48 +1,59 @@
 import fs from 'fs';
 import path from 'path';
 
-let folder_name = "my_video_chunks"; // Replace with the folder containing your .txt chunks
-let file_suffix = "mp4"; // Replace with your desired output video file suffix
+// Function to read all Base64 chunks from JSON files in the specified folder and write them directly to a file
+function reconstructVideo(inputFolder, outputVideoPath) {
+  const files = fs.readdirSync(inputFolder).filter(file => file.endsWith('.json'));
 
-// Function to read all Base64 chunks from .txt files in the specified folder
-function readChunksFromFiles(inputFolder) {
-  const files = fs.readdirSync(inputFolder).filter(file => file.endsWith('.txt'));
-  
-  // Sort files by their chunk index if they follow a naming pattern like 'chunk_1.txt', 'chunk_2.txt', etc.
+  // Sort files by their chunk index if they follow a naming pattern like 'chunk_1.json', 'chunk_2.json', etc.
   files.sort((a, b) => {
-    const aIndex = parseInt(a.match(/(\d+)\.txt$/)[1]);
-    const bIndex = parseInt(b.match(/(\d+)\.txt$/)[1]);
+    const aIndex = parseInt(a.match(/(\d+)\.json$/)[1]);
+    const bIndex = parseInt(b.match(/(\d+)\.json$/)[1]);
     return aIndex - bIndex;
   });
+
+  // Create a writable stream for the output video file
+  const writeStream = fs.createWriteStream(outputVideoPath);
+
+  let totalSize = 0;
+  let processedSize = 0;
   
-  // Read and concatenate all chunks
-  let base64String = '';
-  for (const file of files) {
-    const chunk = fs.readFileSync(path.join(inputFolder, file), 'utf8');
-    base64String += chunk;
-  }
-  
-  return base64String;
+  // Get the total size of all chunks
+  files.forEach(file => {
+    const chunkData = JSON.parse(fs.readFileSync(path.join(inputFolder, file), 'utf8'));
+    totalSize += Buffer.byteLength(chunkData.base64Data, 'base64');
+  });
+
+  // Read each chunk and write it to the output video file
+  files.forEach(file => {
+    const chunkData = JSON.parse(fs.readFileSync(path.join(inputFolder, file), 'utf8'));
+    const chunkBuffer = Buffer.from(chunkData.base64Data, 'base64');
+
+    // Write the chunk buffer to the output file
+    writeStream.write(chunkBuffer);
+
+    // Update the processed size and display progress
+    processedSize += chunkBuffer.length;
+    displayProgress(processedSize, totalSize);
+  });
+
+  // End the writable stream
+  writeStream.end(() => {
+    console.log(); // New line after progress is complete
+    console.log(`Video saved to ${outputVideoPath}`);
+  });
 }
 
-// Function to convert Base64 string back to video and save it as a file
-function base64ToVideo(base64String, outputPath) {
-  const videoBuffer = Buffer.from(base64String, 'base64');
-  fs.writeFileSync(outputPath, videoBuffer);
-  console.log(`Video saved to ${outputPath}`);
-}
-
-// Main function to reconstruct the video from chunks
-function reconstructVideo(inputFolder, outputVideoPath) {
-  // Read all chunks and concatenate them
-  const base64String = readChunksFromFiles(inputFolder);
-  
-  // Convert the concatenated Base64 string back to a video file
-  base64ToVideo(base64String, outputVideoPath);
+// Function to display the progress percentage
+function displayProgress(processedSize, totalSize) {
+  const percentage = ((processedSize / totalSize) * 100).toFixed(2);
+  process.stdout.write(`Progress: ${percentage}%\r`); // Output progress on the same line
 }
 
 // Example usage
-const inputFolder = `./${folder_name}`; // Replace with the folder containing your .txt chunks
+const folder_name = 'IMG_0050_chunks'; // Replace with the folder containing your .json chunks
+const file_suffix = 'MOV'; // Replace with your desired output video file suffix
+const inputFolder = `./${folder_name}`; // Replace with the folder containing your .json chunks
 const outputVideoPath = `${folder_name}.${file_suffix}`; // Replace with your desired output video file path
 
 // Reconstruct the video from the chunks

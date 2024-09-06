@@ -11,6 +11,9 @@ importers:
       fs:
         specifier: 0.0.1-security
         version: 0.0.1-security
+      jpeg-js:
+        specifier: ^0.4.4
+        version: 0.4.4
       path:
         specifier: ^0.12.7
         version: 0.12.7
@@ -25,6 +28,9 @@ packages:
 
   inherits@2.0.3:
     resolution: {integrity: sha512-x00IRNXNy63jwGkJmzPigoySHbaqpNuzKbBOmzK+g2OdZpQ9w+sxCN+VSB3ja7IAge2OP2qpfxTjeNcyjmW1uw==}
+
+  jpeg-js@0.4.4:
+    resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
   path@0.12.7:
     resolution: {integrity: sha512-aXXC6s+1w7otVF9UletFkFcDsJeO7lSZBPUQhtb5O0xJe8LtYhj/GxldoL09bBj9+ZmE2hNoHqQSFMN5fikh4Q==}
@@ -45,6 +51,8 @@ snapshots:
   fs@0.0.1-security: {}
 
   inherits@2.0.3: {}
+
+  jpeg-js@0.4.4: {}
 
   path@0.12.7:
     dependencies:
